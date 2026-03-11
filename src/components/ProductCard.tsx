@@ -45,7 +45,7 @@ export function ProductCard({ focaccia }: ProductCardProps) {
       <div className="absolute inset-0 flex flex-col justify-end p-6 pb-24">
         {/* Product Info */}
         <div className="space-y-3">
-          <h2 className="font-display text-3xl font-semibold text-white drop-shadow-lg">
+          <h2 className="text-3xl font-semibold text-white drop-shadow-lg">
             {focaccia.name}
           </h2>
           
@@ -66,10 +66,10 @@ export function ProductCard({ focaccia }: ProductCardProps) {
           </div>
 
           {/* Price and Add Button */}
-          <div className="flex items-center justify-between pt-4">
+          <div className="flex items-center justify-between pt-4 pb-8">
             <div className="flex items-baseline gap-1">
               <span className="text-white/70 text-sm">$</span>
-              <span className="font-display text-4xl font-bold text-white">
+              <span className="text-4xl font-bold text-white">
                 {focaccia.price.toLocaleString('es-AR')}
               </span>
             </div>

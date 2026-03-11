@@ -21,10 +21,10 @@ export function Header({ onNavigate }: HeaderProps) {
           onClick={() => handleNavClick('landing')}
         >
           <div className="w-10 h-10 rounded-full bg-oliva flex items-center justify-center">
-            <span className="font-display text-lg text-crema font-bold">B</span>
+            <span className="text-lg text-crema font-bold">B</span>
           </div>
           <div>
-            <h1 className="font-display text-xl text-white font-semibold drop-shadow-lg">
+            <h1 className="text-xl text-white font-semibold drop-shadow-lg">
               Benvenuto
             </h1>
             <p className="text-white/70 text-xs">Focaccias artesanales</p>
@@ -44,7 +44,7 @@ export function Header({ onNavigate }: HeaderProps) {
               <div className="flex flex-col gap-6 mt-12">
                 <button 
                   onClick={() => handleNavClick('menu')}
-                  className="text-2xl font-display text-crust text-left hover:text-oliva transition-colors"
+                  className="text-2xl text-crust text-left hover:text-oliva transition-colors font-semibold"
                 >
                   Menú
                 </button>
@@ -55,7 +55,7 @@ export function Header({ onNavigate }: HeaderProps) {
                       document.getElementById('nosotros')?.scrollIntoView({ behavior: 'smooth' });
                     }, 100);
                   }}
-                  className="text-2xl font-display text-crust text-left hover:text-oliva transition-colors"
+                  className="text-2xl text-crust text-left hover:text-oliva transition-colors font-semibold   "
                 >
                   Nosotros
                 </button>
@@ -66,7 +66,7 @@ export function Header({ onNavigate }: HeaderProps) {
                       document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
                     }, 100);
                   }}
-                  className="text-2xl font-display text-crust text-left hover:text-oliva transition-colors"
+                  className="text-2xl  text-crust text-left hover:text-oliva transition-colors font-semibold"
                 >
                   Contacto
                 </button>

@@ -3,64 +3,53 @@ import type { Focaccia } from '@/types';
 export const focaccias: Focaccia[] = [
   {
     id: 1,
-    name: "Romero y Sal Marina",
+    name: "Origen",
     price: 2500,
     stock: 10,
-    ingredients: ["Harina 000", "Agua", "Romero fresco", "Aceite de terracota extra virgen", "Sal marina"],
+    ingredients: ["Harina 000", "Agua", "Aceite de oliva", "Sal marina"],
     image: "/images/focaccia-romero.jpg",
-    description: "Clásica italiana con romero fresco y sal marina gruesa. Crujiente por fuera, esponjosa por dentro."
+    description: "Focaccia originaria, solo aceite de oliva. La esencia de Italia en su forma más pura."
   },
   {
     id: 2,
-    name: "Olivas y Tomillo",
+    name: "Mediterránea",
     price: 2800,
     stock: 8,
-    ingredients: ["Harina 000", "Agua", "Olivas negras", "Olivas verdes", "Tomillo fresco", "Aceite de terracota"],
+    ingredients: ["Harina 000", "Agua", "Cebolla", "Tomate", "Romero", "Oliva", "Aceite de oliva"],
     image: "/images/focaccia-olivas.jpg",
-    description: "Explosión de sabor mediterráneo con mix de olivas y tomillo aromático."
+    description: "Focaccia con cebolla, tomate, romero y oliva. Sabores del Mediterráneo en cada bocado."
   },
   {
     id: 3,
-    name: "Cebolla Caramelizada",
+    name: "Barese",
     price: 3000,
     stock: 6,
-    ingredients: ["Harina 000", "Agua", "Cebolla morada", "Miel", "Aceite de terracota", "Romero"],
+    ingredients: ["Harina 000", "Agua", "Papa tipo española", "Romero", "Oliva", "Aceite de oliva"],
     image: "/images/focaccia-cebolla.jpg",
-    description: "Dulce y salva en perfecta armonía. Cebolla caramelizada lentamente con un toque de miel."
+    description: "Focaccia con papa tipo española, romero y oliva. Receta tradicional de Bari."
   },
   {
     id: 4,
-    name: "Tomate y Albahaca",
+    name: "Apulia",
     price: 2700,
     stock: 9,
-    ingredients: ["Harina 000", "Agua", "Tomates cherry", "Albahaca fresca", "Aceite de terracota", "Ajo"],
+    ingredients: ["Harina 000", "Agua", "Aceitunas verdes", "Aceitunas negras", "Romero", "Oliva"],
     image: "/images/focaccia-tomate.jpg",
-    description: "Los sabores clásicos de Italia en cada bocado. Tomates asados y albahaca fragante."
+    description: "Focaccia con aceitunas verdes y negras, romero y oliva. El sabor del sur de Italia."
   },
   {
     id: 5,
-    name: "Paprika y Queso",
+    name: "7 Lagos",
     price: 3200,
     stock: 5,
-    ingredients: ["Harina 000", "Agua", "Paprika ahumada", "Queso parmesano", "Queso mozzarella", "Aceite de terracota"],
+    ingredients: ["Harina 000", "Agua", "Hongos de pino", "Champiñones", "Portobello", "Cebolla caramelizada"],
     image: "/images/focaccia-paprika.jpg",
-    description: "Intensa y ahumada con doble queso derretido. Para los amantes del sabor fuerte."
-  },
-  {
-    id: 6,
-    name: "Clásica con Hierbas",
-    price: 2300,
-    stock: 12,
-    ingredients: ["Harina 000", "Agua", "Orégano", "Albahaca", "Romero", "Tomillo", "Aceite de terracota"],
-    image: "/images/focaccia-clasica.jpg",
-    description: "La auténtica focaccia genovesa. Mezcla de hierbas italianas en su forma más pura."
+    description: "Hongos de pino, champiñones, portobello y cebolla caramelizada. Una experiencia gourmet."
   }
 ];
 
 export const PICKUP_POINTS = [
   { id: 'casilda-center', name: 'Casilda - Centro', address: 'San Martín 1234, Casilda' },
-  { id: 'casilda-norte', name: 'Casilda - Zona Norte', address: 'Bv. Ovidio Lagos 567, Casilda' },
-  { id: 'rosario-centro', name: 'Rosario - Centro', address: 'Córdoba 890, Rosario' },
 ];
 
-export const WHATSAPP_NUMBER = '5493412345678';
+export const WHATSAPP_NUMBER = '5493464566794';

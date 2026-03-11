@@ -1,4 +1,4 @@
-import { Button, Input, Label, RadioGroup, RadioGroupItem } from "@/components/ui/inputs"
+import { Button, Input, Label } from "@/components/ui/inputs"
 import { useState } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { PICKUP_POINTS, WHATSAPP_NUMBER } from '@/lib/data';
@@ -25,12 +25,6 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
   const totalPrice = getTotalPrice();
 
   const timeSlots = [
-    '10:00 - 11:00',
-    '11:00 - 12:00',
-    '12:00 - 13:00',
-    '13:00 - 14:00',
-    '14:00 - 15:00',
-    '15:00 - 16:00',
     '16:00 - 17:00',
     '17:00 - 18:00',
     '18:00 - 19:00',
@@ -51,15 +45,15 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
     };
 
     useCartStore.getState().setOrderDetails(orderDetails);
-    
+
     const message = generateWhatsAppMessage();
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-    
+
     // Clear cart and open WhatsApp
     clearCart();
     window.open(whatsappUrl, '_blank');
-    
+
     setIsSubmitting(false);
   };
 
@@ -68,23 +62,23 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
   return (
     <>
       <SheetHeader className="flex-row items-center gap-3">
-        <button 
+        <button
           onClick={onBack}
-          className="p-2 -ml-2 rounded-full hover:bg-terracota/10 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-crema/10 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-carbon" />
         </button>
-        <SheetTitle className="font-display text-2xl text-carbon">
+        <SheetTitle className="text-2xl text-carbon">
           Finalizar Pedido
         </SheetTitle>
       </SheetHeader>
 
-      <div className="flex-1 overflow-y-auto py-4 space-y-6">
+      <div className="flex-1 overflow-y-auto space-y-6 pl-4 pr-4">
         {/* Total */}
         <div className="p-4 bg-terracota/10 rounded-xl">
           <div className="flex justify-between items-center">
             <span className="text-carbon/70">Total a pagar</span>
-            <span className="font-display text-2xl text-carbon font-semibold">
+            <span className="text-2xl text-carbon font-semibold">
               ${totalPrice.toLocaleString('es-AR')}
             </span>
           </div>
@@ -110,40 +104,32 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
             <MapPin className="w-4 h-4 text-terracota" />
             Método de entrega
           </Label>
-          <RadioGroup
-            value={deliveryMethod}
-            onValueChange={(value) => setDeliveryMethod(value as 'takeaway' | 'pickup')}
-            className="grid grid-cols-2 gap-3"
-          >
-            <div>
-              <RadioGroupItem
-                value="takeaway"
-                id="takeaway"
-                className="peer sr-only"
-              />
-              <Label
-                htmlFor="takeaway"
-                className="flex flex-col items-center justify-center p-4 bg-white border-2 border-terracota/20 rounded-xl cursor-pointer peer-data-[state=checked]:border-terracota peer-data-[state=checked]:bg-terracota/5 transition-all"
-              >
-                <span className="text-sm font-medium text-carbon">Take-away</span>
-                <span className="text-xs text-carbon/60 mt-1">Retiro en puerta</span>
-              </Label>
-            </div>
-            <div>
-              <RadioGroupItem
-                value="pickup"
-                id="pickup"
-                className="peer sr-only"
-              />
-              <Label
-                htmlFor="pickup"
-                className="flex flex-col items-center justify-center p-4 bg-white border-2 border-terracota/20 rounded-xl cursor-pointer peer-data-[state=checked]:border-terracota peer-data-[state=checked]:bg-terracota/5 transition-all"
-              >
-                <span className="text-sm font-medium text-carbon">Punto de retiro</span>
-                <span className="text-xs text-carbon/60 mt-1">Elegir ubicación</span>
-              </Label>
-            </div>
-          </RadioGroup>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setDeliveryMethod('takeaway')}
+              className={`flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                deliveryMethod === 'takeaway'
+                  ? 'border-oliva bg-oliva/10'
+                  : 'bg-white border-terracota/20 hover:border-terracota/40'
+              }`}
+            >
+              <span className="text-sm font-medium text-carbon">Take-away</span>
+              <span className="text-xs text-carbon/60 mt-1">Retiro en puerta</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDeliveryMethod('pickup')}
+              className={`flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                deliveryMethod === 'pickup'
+                  ? 'border-oliva bg-oliva/10'
+                  : 'bg-white border-terracota/20 hover:border-terracota/40'
+              }`}
+            >
+              <span className="text-sm font-medium text-carbon">Punto de retiro</span>
+              <span className="text-xs text-carbon/60 mt-1">Elegir ubicación</span>
+            </button>
+          </div>
         </div>
 
         {/* Pickup Points */}
@@ -153,28 +139,23 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
               <MapPin className="w-4 h-4 text-terracota" />
               Selecciona un punto
             </Label>
-            <RadioGroup
-              value={pickupPoint}
-              onValueChange={setPickupPoint}
-              className="space-y-2"
-            >
+            <div className="space-y-2">
               {PICKUP_POINTS.map((point) => (
-                <div key={point.id}>
-                  <RadioGroupItem
-                    value={point.id}
-                    id={point.id}
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor={point.id}
-                    className="flex flex-col p-3 bg-white border-2 border-terracota/20 rounded-xl cursor-pointer peer-data-[state=checked]:border-terracota peer-data-[state=checked]:bg-terracota/5 transition-all"
-                  >
-                    <span className="text-sm font-medium text-carbon">{point.name}</span>
-                    <span className="text-xs text-carbon/60">{point.address}</span>
-                  </Label>
-                </div>
+                <button
+                  key={point.id}
+                  type="button"
+                  onClick={() => setPickupPoint(point.id)}
+                  className={`flex flex-col p-3 w-full text-left border-2 rounded-xl cursor-pointer transition-all ${
+                    pickupPoint === point.id
+                      ? 'border-oliva bg-oliva/10'
+                      : 'bg-white border-terracota/20 hover:border-terracota/40'
+                  }`}
+                >
+                  <span className="text-sm font-medium text-carbon">{point.name}</span>
+                  <span className="text-xs text-carbon/60">{point.address}</span>
+                </button>
               ))}
-            </RadioGroup>
+            </div>
           </div>
         )}
 
@@ -189,11 +170,10 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
               <button
                 key={time}
                 onClick={() => setPickupTime(time)}
-                className={`p-2.5 text-sm rounded-lg border transition-all ${
-                  pickupTime === time
-                    ? 'bg-terracota text-crema border-terracota'
-                    : 'bg-white text-carbon border-terracota/20 hover:border-terracota/50'
-                }`}
+                className={`p-2.5 text-sm rounded-lg border transition-all ${pickupTime === time
+                  ? 'border-oliva bg-oliva/10'
+                  : 'bg-white border-terracota/20 hover:border-terracota/40'
+                  }`}
               >
                 {time}
               </button>
@@ -217,13 +197,13 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
       </div>
 
       {/* Submit Button */}
-      <div className="border-t border-terracota/10 pt-4">
+      <div className="pt-4 pb-14 pl-10 pr-10">
         <Button
           onClick={handleSubmit}
           disabled={!isValid || isSubmitting}
-          className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-medium h-14 rounded-xl text-lg"
+          className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-medium h-11 rounded-xl text-sm"
         >
-          <Phone className="w-5 h-5 mr-2" />
+          <Phone className="w-4 h-4 mr-1.5" />
           Enviar pedido por WhatsApp
         </Button>
         <p className="text-center text-xs text-carbon/50 mt-2">

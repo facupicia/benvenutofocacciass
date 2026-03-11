@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Playfair Display', 'serif'],
-        sans: ['Lora', 'sans-serif'],
+        display: ['Poppins', 'sans-serif'],
+        sans: ['Poppins', 'sans-serif'],
       },
       colors: {
         crema: '#FBEEDE',

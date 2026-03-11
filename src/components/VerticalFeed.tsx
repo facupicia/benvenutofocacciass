@@ -140,22 +140,26 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
       {/* Cart Summary (when items in cart) */}
       {totalItems > 0 && (
         <div className="absolute bottom-6 left-4 right-4 z-50">
-          <div className="bg-oliva/95 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-crema/20 flex items-center justify-center">
-                <ShoppingBag className="w-5 h-5 text-crema" />
+          <CartDrawer
+            trigger={
+              <div className="bg-oliva/95 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg cursor-pointer active:scale-[0.98] transition-transform">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-crema/20 flex items-center justify-center">
+                    <ShoppingBag className="w-5 h-5 text-crema" />
+                  </div>
+                  <div>
+                    <p className="text-crema font-medium">{totalItems} item{totalItems > 1 ? 's' : ''}</p>
+                    <p className="text-crema/70 text-sm">En tu pedido</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-crema text-xl font-semibold">
+                    ${useCartStore.getState().getTotalPrice().toLocaleString('es-AR')}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-crema font-medium">{totalItems} item{totalItems > 1 ? 's' : ''}</p>
-                <p className="text-crema/70 text-sm">En tu pedido</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-crema font-display text-xl font-semibold">
-                ${useCartStore.getState().getTotalPrice().toLocaleString('es-AR')}
-              </p>
-            </div>
-          </div>
+            }
+          />
         </div>
       )}
 

@@ -1,5 +1,4 @@
-@import "@fontsource/lora";
-@import "@fontsource/playfair-display";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -73,7 +72,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', sans-serif;
   }
 }
 
