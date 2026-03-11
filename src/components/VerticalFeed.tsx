@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { focaccias } from '@/lib/data';
 import { ProductCard } from './ProductCard';
+import { MenuListView } from './MenuListView';
 import { CartDrawer } from './CartDrawer';
-import { ChevronUp, ChevronDown, ShoppingBag } from 'lucide-react';
+import { ChevronUp, ChevronDown, ShoppingBag, LayoutGrid, List } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { Header } from './Header';
 
@@ -12,6 +13,7 @@ interface VerticalFeedProps {
 
 export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [viewMode, setViewMode] = useState<'feed' | 'list'>('feed');
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number>(0);
   const { getTotalItems } = useCartStore();
@@ -83,59 +85,76 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
     <div className="relative h-screen w-full bg-crust overflow-hidden">
       {/* Header */}
       <Header onNavigate={onNavigate} />
-      <div className="absolute top-0 right-0 z-50 p-4 pt-6 mr-14 cursor-pointer">
+      <div className="absolute top-0 right-0 z-50 p-4 pt-6 flex items-center gap-2">
+        {/* View Toggle */}
+        <button
+          onClick={() => setViewMode(viewMode === 'feed' ? 'list' : 'feed')}
+          className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all hover:bg-white/30"
+        >
+          {viewMode === 'feed' ? (
+            <List className="w-5 h-5 text-white" />
+          ) : (
+            <LayoutGrid className="w-5 h-5 text-white" />
+          )}
+        </button>
         <CartDrawer />
       </div>
 
-      {/* Scroll Container */}
-      <div
-        ref={containerRef}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onWheel={handleWheel}
-        className="h-full w-full overflow-y-auto snap-y snap-mandatory scrollbar-hide"
-        style={{ scrollBehavior: 'smooth' }}
-      >
-        {focaccias.map((focaccia) => (
-          <ProductCard
-            key={focaccia.id}
-            focaccia={focaccia}
-          />
-        ))}
-      </div>
+      {viewMode === 'feed' ? (
+        <>
+          {/* Scroll Container */}
+          <div
+            ref={containerRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onWheel={handleWheel}
+            className="h-full w-full overflow-y-auto snap-y snap-mandatory scrollbar-hide"
+            style={{ scrollBehavior: 'smooth' }}
+          >
+            {focaccias.map((focaccia) => (
+              <ProductCard
+                key={focaccia.id}
+                focaccia={focaccia}
+              />
+            ))}
+          </div>
 
-      {/* Navigation Indicators */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
-        {focaccias.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex
-                ? 'bg-oliva w-2 h-6'
-                : 'bg-white/50 hover:bg-white/70'
-            }`}
-          />
-        ))}
-      </div>
+          {/* Navigation Indicators */}
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
+            {focaccias.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === currentIndex
+                    ? 'bg-oliva w-2 h-6'
+                    : 'bg-white/50 hover:bg-white/70'
+                }`}
+              />
+            ))}
+          </div>
 
-      {/* Scroll Buttons (Desktop) */}
-      <div className="hidden md:flex absolute right-4 bottom-24 z-50 flex-col gap-2">
-        <button
-          onClick={handlePrev}
-          disabled={currentIndex === 0}
-          className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-white/30 transition-colors"
-        >
-          <ChevronUp className="w-5 h-5 text-white" />
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={currentIndex === focaccias.length - 1}
-          className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-white/30 transition-colors"
-        >
-          <ChevronDown className="w-5 h-5 text-white" />
-        </button>
-      </div>
+          {/* Scroll Buttons (Desktop) */}
+          <div className="hidden md:flex absolute right-4 bottom-24 z-50 flex-col gap-2">
+            <button
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-white/30 transition-colors"
+            >
+              <ChevronUp className="w-5 h-5 text-white" />
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={currentIndex === focaccias.length - 1}
+              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-white/30 transition-colors"
+            >
+              <ChevronDown className="w-5 h-5 text-white" />
+            </button>
+          </div>
+        </>
+      ) : (
+        <MenuListView focaccias={focaccias} />
+      )}
 
       {/* Cart Summary (when items in cart) */}
       {totalItems > 0 && (

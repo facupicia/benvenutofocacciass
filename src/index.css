@@ -5,6 +5,13 @@
 
 @layer base {
   :root {
+    /* === Brand Palette (edit these to change the whole app) === */
+    --color-crema: #FBEEDE;
+    --color-oliva: #887B46;
+    --color-crust: #692F09;
+    --color-terracota: #C75B39;
+    --color-carbon: #2C2C2C;
+
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -99,6 +106,6 @@ body {
 
 /* Custom selection color */
 ::selection {
-  background-color: #887B46;
-  color: #FBEEDE;
+  background-color: var(--color-oliva);
+  color: var(--color-crema);
 }
