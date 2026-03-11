@@ -10,7 +10,7 @@ interface ProductCardProps {
 export function ProductCard({ focaccia }: ProductCardProps) {
   const [showAdded, setShowAdded] = useState(false);
   const { addToCart, items, updateQuantity } = useCartStore();
-  
+
   const cartItem = items.find(item => item.focaccia.id === focaccia.id);
   const quantity = cartItem?.quantity || 0;
 
@@ -33,7 +33,7 @@ export function ProductCard({ focaccia }: ProductCardProps) {
   return (
     <div className="relative h-screen w-full flex-shrink-0 snap-start overflow-hidden">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${focaccia.image})` }}
       >
@@ -42,13 +42,13 @@ export function ProductCard({ focaccia }: ProductCardProps) {
       </div>
 
       {/* Content */}
-      <div className="absolute inset-0 flex flex-col justify-end p-6 pb-24">
+      <div className="absolute inset-0 flex flex-col justify-end p-6 pb-20">
         {/* Product Info */}
         <div className="space-y-3">
           <h2 className="text-3xl font-semibold text-white drop-shadow-lg">
             {focaccia.name}
           </h2>
-          
+
           <p className="text-white/90 text-sm leading-relaxed max-w-md drop-shadow-md">
             {focaccia.description}
           </p>
@@ -56,7 +56,7 @@ export function ProductCard({ focaccia }: ProductCardProps) {
           {/* Ingredients */}
           <div className="flex flex-wrap gap-1.5">
             {focaccia.ingredients.slice(0, 4).map((ingredient, idx) => (
-              <span 
+              <span
                 key={idx}
                 className="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white"
               >
