@@ -1,12 +1,13 @@
+import { Button, Input, Label, RadioGroup, RadioGroupItem } from "@/components/ui/inputs"
 import { useState } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { PICKUP_POINTS, WHATSAPP_NUMBER } from '@/lib/data';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+;
+;
+;
+;
 import { ArrowLeft, Clock, MapPin, User, MessageSquare, Phone } from 'lucide-react';
-import { SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { SheetHeader, SheetTitle } from "@/components/ui/overlays";
 
 interface CheckoutFormProps {
   onBack: () => void;

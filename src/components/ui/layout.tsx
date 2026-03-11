@@ -1,29 +1,168 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import { PanelLeftIcon } from "lucide-react"
+import * as AspectRatioPrimitive from "@radix-ui/react-aspect-ratio";
+import * as React from "react";
+import * as SeparatorPrimitive from "@radix-ui/react-separator";
+import { cn } from "@/lib/utils";
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import { GripVerticalIcon, PanelLeftIcon } from "lucide-react";
+import * as ResizablePrimitive from "react-resizable-panels";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Button, Input } from "@/components/ui/inputs";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/overlays";
+import { Skeleton } from "@/components/ui/feedback";
 
-import { useIsMobile } from "@/hooks/use-mobile"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
-import { Skeleton } from "@/components/ui/skeleton"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+function AspectRatio({
+  ...props
+}: React.ComponentProps<typeof AspectRatioPrimitive.Root>) {
+  return <AspectRatioPrimitive.Root data-slot="aspect-ratio" {...props} />
+}
+
+export { AspectRatio }
+
+
+
+
+
+function Separator({
+  className,
+  orientation = "horizontal",
+  decorative = true,
+  ...props
+}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {
+  return (
+    <SeparatorPrimitive.Root
+      data-slot="separator"
+      decorative={decorative}
+      orientation={orientation}
+      className={cn(
+        "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Separator }
+
+
+
+function ScrollArea({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+  return (
+    <ScrollAreaPrimitive.Root
+      data-slot="scroll-area"
+      className={cn("relative", className)}
+      {...props}
+    >
+      <ScrollAreaPrimitive.Viewport
+        data-slot="scroll-area-viewport"
+        className="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1"
+      >
+        {children}
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar />
+      <ScrollAreaPrimitive.Corner />
+    </ScrollAreaPrimitive.Root>
+  )
+}
+
+function ScrollBar({
+  className,
+  orientation = "vertical",
+  ...props
+}: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
+  return (
+    <ScrollAreaPrimitive.ScrollAreaScrollbar
+      data-slot="scroll-area-scrollbar"
+      orientation={orientation}
+      className={cn(
+        "flex touch-none p-px transition-colors select-none",
+        orientation === "vertical" &&
+          "h-full w-2.5 border-l border-l-transparent",
+        orientation === "horizontal" &&
+          "h-2.5 flex-col border-t border-t-transparent",
+        className
+      )}
+      {...props}
+    >
+      <ScrollAreaPrimitive.ScrollAreaThumb
+        data-slot="scroll-area-thumb"
+        className="bg-border relative flex-1 rounded-full"
+      />
+    </ScrollAreaPrimitive.ScrollAreaScrollbar>
+  )
+}
+
+export { ScrollArea, ScrollBar }
+
+
+
+
+function ResizablePanelGroup({
+  className,
+  ...props
+}: React.ComponentProps<typeof ResizablePrimitive.Group>) {
+  return (
+    <ResizablePrimitive.Group
+      data-slot="resizable-panel-group"
+      className={cn(
+        "flex h-full w-full data-[panel-group-direction=vertical]:flex-col",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function ResizablePanel({
+  ...props
+}: React.ComponentProps<typeof ResizablePrimitive.Panel>) {
+  return <ResizablePrimitive.Panel data-slot="resizable-panel" {...props} />
+}
+
+function ResizableHandle({
+  withHandle,
+  className,
+  ...props
+}: React.ComponentProps<typeof ResizablePrimitive.Separator> & {
+  withHandle?: boolean
+}) {
+  return (
+    <ResizablePrimitive.Separator
+      data-slot="resizable-handle"
+      className={cn(
+        "bg-border focus-visible:ring-ring relative flex w-px items-center justify-center after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-hidden data-[panel-group-direction=vertical]:h-px data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:after:left-0 data-[panel-group-direction=vertical]:after:h-1 data-[panel-group-direction=vertical]:after:w-full data-[panel-group-direction=vertical]:after:translate-x-0 data-[panel-group-direction=vertical]:after:-translate-y-1/2 [&[data-panel-group-direction=vertical]>div]:rotate-90",
+        className
+      )}
+      {...props}
+    >
+      {withHandle && (
+        <div className="bg-border z-10 flex h-4 w-3 items-center justify-center rounded-xs border">
+          <GripVerticalIcon className="size-2.5" />
+        </div>
+      )}
+    </ResizablePrimitive.Separator>
+  )
+}
+
+export { ResizablePanelGroup, ResizablePanel, ResizableHandle }
+
+
+
+
+
+
+
+
+
+
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -608,6 +747,7 @@ function SidebarMenuSkeleton({
 }) {
   // Random width between 50 to 90%.
   const width = React.useMemo(() => {
+    // eslint-disable-next-line
     return `${Math.floor(Math.random() * 40) + 50}%`
   }, [])
 
@@ -724,3 +864,218 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
+
+function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      role="list"
+      data-slot="item-group"
+      className={cn("group/item-group flex flex-col", className)}
+      {...props}
+    />
+  )
+}
+
+function ItemSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof Separator>) {
+  return (
+    <Separator
+      data-slot="item-separator"
+      orientation="horizontal"
+      className={cn("my-0", className)}
+      {...props}
+    />
+  )
+}
+
+const itemVariants = cva(
+  "group/item flex items-center border border-transparent text-sm rounded-md transition-colors [a]:hover:bg-accent/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+  {
+    variants: {
+      variant: {
+        default: "bg-transparent",
+        outline: "border-border",
+        muted: "bg-muted/50",
+      },
+      size: {
+        default: "p-4 gap-4 ",
+        sm: "py-3 px-4 gap-2.5",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Item({
+  className,
+  variant = "default",
+  size = "default",
+  asChild = false,
+  ...props
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof itemVariants> & { asChild?: boolean }) {
+  const Comp = asChild ? Slot : "div"
+  return (
+    <Comp
+      data-slot="item"
+      data-variant={variant}
+      data-size={size}
+      className={cn(itemVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+const itemMediaVariants = cva(
+  "flex shrink-0 items-center justify-center gap-2 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none group-has-[[data-slot=item-description]]/item:translate-y-0.5",
+  {
+    variants: {
+      variant: {
+        default: "bg-transparent",
+        icon: "size-8 border rounded-sm bg-muted [&_svg:not([class*='size-'])]:size-4",
+        image:
+          "size-10 rounded-sm overflow-hidden [&_img]:size-full [&_img]:object-cover",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
+function ItemMedia({
+  className,
+  variant = "default",
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants>) {
+  return (
+    <div
+      data-slot="item-media"
+      data-variant={variant}
+      className={cn(itemMediaVariants({ variant, className }))}
+      {...props}
+    />
+  )
+}
+
+function ItemContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="item-content"
+      className={cn(
+        "flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="item-title"
+      className={cn(
+        "flex w-fit items-center gap-2 text-sm leading-snug font-medium",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
+  return (
+    <p
+      data-slot="item-description"
+      className={cn(
+        "text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-balance",
+        "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function ItemActions({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="item-actions"
+      className={cn("flex items-center gap-2", className)}
+      {...props}
+    />
+  )
+}
+
+function ItemHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="item-header"
+      className={cn(
+        "flex basis-full items-center justify-between gap-2",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function ItemFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="item-footer"
+      className={cn(
+        "flex basis-full items-center justify-between gap-2",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemActions,
+  ItemGroup,
+  ItemSeparator,
+  ItemTitle,
+  ItemDescription,
+  ItemHeader,
+  ItemFooter,
+}
+
+function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
+  return (
+    <kbd
+      data-slot="kbd"
+      className={cn(
+        "bg-muted text-muted-foreground pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs font-medium select-none",
+        "[&_svg:not([class*='size-'])]:size-3",
+        "[[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function KbdGroup({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <kbd
+      data-slot="kbd-group"
+      className={cn("inline-flex items-center gap-1", className)}
+      {...props}
+    />
+  )
+}
+
+export { Kbd, KbdGroup }

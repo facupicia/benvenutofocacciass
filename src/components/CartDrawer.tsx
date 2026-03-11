@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useCartStore } from '@/store/cartStore';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/overlays";
+import { Button } from "@/components/ui/inputs";
 import { ShoppingBag, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
 import { CheckoutForm } from './CheckoutForm';
 

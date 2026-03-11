@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { VerticalFeed } from '@/components/VerticalFeed';
 import { Landing } from '@/components/Landing';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from "@/components/ui/feedback";
 
 function App() {
   const [currentView, setCurrentView] = useState<'landing' | 'menu'>('landing');
