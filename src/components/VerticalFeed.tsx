@@ -89,7 +89,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
         {/* View Toggle */}
         <button
           onClick={() => setViewMode(viewMode === 'feed' ? 'list' : 'feed')}
-          className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all hover:bg-white/30"
+          className="w-10 h-10 rounded-full bg-oliva backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all hover:bg-white/30"
         >
           {viewMode === 'feed' ? (
             <List className="w-5 h-5 text-white" />
@@ -161,7 +161,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
         <div className="absolute bottom-6 left-4 right-4 z-50">
           <CartDrawer
             trigger={
-              <div className="bg-oliva/95 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg cursor-pointer active:scale-[0.98] transition-transform">
+              <div className="bg-oliva backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg cursor-pointer active:scale-[0.98] transition-transform">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-crema/20 flex items-center justify-center">
                     <ShoppingBag className="w-5 h-5 text-crema" />

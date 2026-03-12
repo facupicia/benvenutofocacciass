@@ -17,7 +17,7 @@ export function CartDrawer({ trigger }: CartDrawerProps) {
   const totalPrice = getTotalPrice();
 
   const defaultTrigger = (
-    <button className="relative w-12 h-12 rounded-full bg-terracota/90 backdrop-blur-sm flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+    <button className="relative w-12 h-12 rounded-full bg-terracota backdrop-blur-sm flex items-center justify-center shadow-lg active:scale-95 transition-transform">
       <ShoppingBag className="w-5 h-5 text-crema" />
       {totalItems > 0 && (
         <span className="absolute -top-1 -right-1 w-5 h-5 bg-carbon rounded-full text-crema text-xs font-bold flex items-center justify-center">
