@@ -1,5 +1,6 @@
 
 import { Header } from './Header';
+import { ReviewsSection } from './ReviewsSection';
 
 interface LandingProps {
   onNavigate: (view: 'landing' | 'menu') => void;
@@ -55,6 +56,9 @@ export function Landing({ onNavigate }: LandingProps) {
           </p>
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <ReviewsSection />
 
       {/* Contacto Section */}
       <section id="contacto" className="py-24 px-4 bg-white/50">

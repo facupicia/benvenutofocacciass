@@ -14,6 +14,13 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface Review {
+  id: string;
+  rating: number;
+  description: string;
+  date: string;
+}
+
 export interface OrderDetails {
   name: string;
   deliveryMethod: 'takeaway' | 'pickup';

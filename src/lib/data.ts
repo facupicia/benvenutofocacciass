@@ -1,5 +1,7 @@
+import { supabase } from './supabase';
 import type { Focaccia } from '@/types';
 
+// Static fallback data (used when Supabase is unavailable)
 export const focaccias: Focaccia[] = [
   {
     id: 1,
@@ -54,3 +56,54 @@ export const PICKUP_POINTS = [
 ];
 
 export const WHATSAPP_NUMBER = '5493464566794';
+
+/**
+ * Fetch products from Supabase, fallback to static data
+ */
+export async function fetchProducts(): Promise<Focaccia[]> {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) throw error;
+    return data ?? focaccias;
+  } catch {
+    console.warn('Failed to fetch products from Supabase, using static data');
+    return focaccias;
+  }
+}
+
+/**
+ * Fetch latest reviews from Supabase
+ */
+export async function fetchReviews(limit = 10) {
+  try {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+    return data ?? [];
+  } catch {
+    console.warn('Failed to fetch reviews from Supabase');
+    return [];
+  }
+}
+
+/**
+ * Insert a review into Supabase
+ */
+export async function insertReview(review: { rating: number; description: string }) {
+  const { data, error } = await supabase
+    .from('reviews')
+    .insert([review])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}

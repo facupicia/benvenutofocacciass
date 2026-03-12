@@ -35,7 +35,7 @@ export function Header({ onNavigate }: HeaderProps) {
         <div className="flex items-center gap-4">
           <Sheet>
             <SheetTrigger asChild>
-              <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors">
+              <button className="w-10 h-10 rounded-full bg-terracota backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors">
                 <Menu className="w-5 h-5 text-white" />
               </button>
             </SheetTrigger>

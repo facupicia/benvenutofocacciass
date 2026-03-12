@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
-import { focaccias } from '@/lib/data';
+import { focaccias as staticFocaccias, fetchProducts } from '@/lib/data';
 import { ProductCard } from './ProductCard';
 import { MenuListView } from './MenuListView';
 import { CartDrawer } from './CartDrawer';
-import { ChevronUp, ChevronDown, ShoppingBag, LayoutGrid, List } from 'lucide-react';
+import { ReviewModal } from './ReviewModal';
+import { ChevronUp, ChevronDown, ShoppingBag, LayoutGrid, List, Star } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { Header } from './Header';
+import type { Focaccia } from '@/types';
 
 interface VerticalFeedProps {
   onNavigate: (view: 'landing' | 'menu') => void;
@@ -14,14 +16,20 @@ interface VerticalFeedProps {
 export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'feed' | 'list'>('feed');
+  const [products, setProducts] = useState<Focaccia[]>(staticFocaccias);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number>(0);
   const { getTotalItems } = useCartStore();
   const totalItems = getTotalItems();
 
+  // Fetch products from Supabase
+  useEffect(() => {
+    fetchProducts().then(setProducts);
+  }, []);
+
   const scrollToIndex = (index: number) => {
-    if (index < 0 || index >= focaccias.length) return;
-    
+    if (index < 0 || index >= products.length) return;
+
     const container = containerRef.current;
     if (!container) return;
 
@@ -44,7 +52,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
     const handleScroll = () => {
       const itemHeight = container.clientHeight;
       const newIndex = Math.round(container.scrollTop / itemHeight);
-      if (newIndex !== currentIndex && newIndex >= 0 && newIndex < focaccias.length) {
+      if (newIndex !== currentIndex && newIndex >= 0 && newIndex < products.length) {
         setCurrentIndex(newIndex);
       }
     };
@@ -61,7 +69,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
   const handleTouchEnd = (e: React.TouchEvent) => {
     const touchEndY = e.changedTouches[0].clientY;
     const diff = touchStartY.current - touchEndY;
-    
+
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
         handleNext();
@@ -86,6 +94,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
       {/* Header */}
       <Header onNavigate={onNavigate} />
       <div className="absolute top-0 right-0 z-50 p-4 pt-6 flex items-center gap-2">
+
         {/* View Toggle */}
         <button
           onClick={() => setViewMode(viewMode === 'feed' ? 'list' : 'feed')}
@@ -111,7 +120,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
             className="h-full w-full overflow-y-auto snap-y snap-mandatory scrollbar-hide"
             style={{ scrollBehavior: 'smooth' }}
           >
-            {focaccias.map((focaccia) => (
+            {products.map((focaccia) => (
               <ProductCard
                 key={focaccia.id}
                 focaccia={focaccia}
@@ -119,17 +128,26 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
             ))}
           </div>
 
+          {/* Review Button */}
+          <div className="absolute right-4 top-24 z-50 flex flex-col gap-2">
+            <ReviewModal>
+              <button className="w-10 h-10 rounded-full bg-oliva backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all hover:bg-white">
+                <Star className="w-5 h-5 text-white fill-white" />
+              </button>
+            </ReviewModal>
+          </div>
+
           {/* Navigation Indicators */}
           <div className="absolute left-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
-            {focaccias.map((_, index) => (
+
+            {products.map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentIndex
+                className={`w-2 h-2 rounded-full transition-all ${index === currentIndex
                     ? 'bg-oliva w-2 h-6'
-                    : 'bg-white/50 hover:bg-white/70'
-                }`}
+                    : 'bg-white/50 hover:bg-white'
+                  }`}
               />
             ))}
           </div>
@@ -145,7 +163,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
             </button>
             <button
               onClick={handleNext}
-              disabled={currentIndex === focaccias.length - 1}
+              disabled={currentIndex === products.length - 1}
               className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-white/30 transition-colors"
             >
               <ChevronDown className="w-5 h-5 text-white" />
@@ -153,7 +171,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
           </div>
         </>
       ) : (
-        <MenuListView focaccias={focaccias} />
+        <MenuListView focaccias={products} />
       )}
 
       {/* Cart Summary (when items in cart) */}
@@ -186,7 +204,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
         <div className="px-4 py-2 bg-black/40 backdrop-blur-sm rounded-full">
           <span className="text-white/90 text-sm">
-            {currentIndex + 1} / {focaccias.length}
+            {currentIndex + 1} / {products.length}
           </span>
         </div>
       </div>
