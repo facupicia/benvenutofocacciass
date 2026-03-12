@@ -120,7 +120,7 @@ export function CartDrawer({ trigger }: CartDrawerProps) {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-black/10 pt-4 space-y-4 pl-4 pr-4">
+            <div className="border-t border-black/10 pt-4 space-y-4 pl-4 pr-4 pb-10">
               <div className="flex justify-between items-center">
                 <span className="text-carbon/70">Subtotal</span>
                 <span className="text-xl text-carbon">

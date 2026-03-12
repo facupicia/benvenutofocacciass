@@ -120,7 +120,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
           </div>
 
           {/* Navigation Indicators */}
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
             {focaccias.map((_, index) => (
               <button
                 key={index}
