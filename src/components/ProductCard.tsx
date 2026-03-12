@@ -32,14 +32,31 @@ export function ProductCard({ focaccia }: ProductCardProps) {
 
   return (
     <div className="relative h-screen w-full flex-shrink-0 snap-start overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${focaccia.image})` }}
-      >
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-      </div>
+      {/* Background Media */}
+      {focaccia.video ? (
+        <div className="absolute inset-0">
+          <video
+            src={focaccia.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Gradient Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-[30%] bg-gradient-to-b from-black/60 to-transparent" />
+        </div>
+      ) : (
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${focaccia.image})` }}
+        >
+          {/* Gradient Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-[30%] bg-gradient-to-b from-black/40 to-transparent" />
+        </div>
+      )}
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-end p-6 pb-20">

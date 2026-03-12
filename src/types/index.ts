@@ -5,6 +5,7 @@ export interface Focaccia {
   stock: number;
   ingredients: string[];
   image: string;
+  video?: string;
   description: string;
 }
 

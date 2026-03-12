@@ -8,7 +8,8 @@ export const focaccias: Focaccia[] = [
     stock: 10,
     ingredients: ["Harina 000", "Agua", "Aceite de oliva", "Sal marina"],
     image: "/images/focaccia-romero.jpg",
-    description: "Focaccia originaria, solo aceite de oliva. La esencia de Italia en su forma más pura."
+    description: "Focaccia originaria, solo aceite de oliva. La esencia de Italia en su forma más pura.",
+    video: "https://v16-vod.capcutvod.com/61f0029afb7ecb8169b764a20e8dfb1d/69b6b407/video/tos/alisg/tos-alisg-ve-8fe9aq-sg/oIASWSzWQhMt4BcLmEnGo9khQ4FfIXyYAEwB9P/?a=3006&bti=cHJ3bzFmc3dmZEBvY15taF4rcm1gYA%3D%3D&ch=0&cr=0&dr=0&lr=all&cd=0%7C0%7C0%7C0&cv=1&br=2070&bt=1035&cs=0&ds=3&ft=GNvlXInz7ThkavhPXq8Zmo&mime_type=video_mp4&qs=0&rc=Zzc5PGhlOGU8ZGhkM2k7aUBpM2lnNDg6ZmxzbDMzOGVkNEBgXmIzM2BjXzExYzQ0NmMvYSNwZGUvcjRfbC1gLS1kYi1zcw%3D%3D&vvpl=1&l=202603101548248A1C72FD6EE8724EAF42&btag=e000b0000"
   },
   {
     id: 2,
