@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from 'react';
 import { focaccias as staticFocaccias, fetchProducts } from '@/lib/data';
 import { ProductCard } from './ProductCard';

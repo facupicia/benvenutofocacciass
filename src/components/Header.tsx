@@ -1,3 +1,5 @@
+"use client";
+
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/overlays";
 import { Menu } from 'lucide-react';
 

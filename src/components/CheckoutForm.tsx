@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Input, Label } from "@/components/ui/inputs"
 import { useState } from 'react';
 import { useCartStore } from '@/store/cartStore';

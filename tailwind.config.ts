@@ -1,9 +1,13 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
-export default {
+const config: Config = {
   darkMode: ["class"],
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -92,4 +96,6 @@ export default {
     },
   },
   plugins: [tailwindcssAnimate],
-}
+};
+
+export default config;

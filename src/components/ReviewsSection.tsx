@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useCallback } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { useReviewStore } from '@/store/reviewStore';

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 import type { Focaccia } from '@/types';
 import { useCartStore } from '@/store/cartStore';
