@@ -25,5 +25,6 @@ export interface OrderDetails {
   name: string;
   deliveryMethod: 'takeaway' | 'pickup';
   pickupTime: string;
+  paymentMethod: 'transferencia' | 'efectivo';
   notes?: string;
 }

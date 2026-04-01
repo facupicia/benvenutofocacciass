@@ -100,6 +100,10 @@ export const useCartStore = create<CartState>()(
           ? 'Take-away' 
           : 'Punto de Retiro';
 
+        const paymentText = orderDetails.paymentMethod === 'transferencia' 
+          ? 'Transferencia' 
+          : 'Efectivo';
+
         return `¡Hola! Quiero hacer un pedido de focaccias:
 
 ${itemsList}
@@ -110,6 +114,7 @@ ${itemsList}
 Nombre: ${orderDetails.name}
 Método: ${deliveryText}
 Horario: ${orderDetails.pickupTime}
+Pago: ${paymentText}
 ${orderDetails.notes ? `Notas: ${orderDetails.notes}` : ''}`;
       },
     }),

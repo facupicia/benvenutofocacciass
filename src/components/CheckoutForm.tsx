@@ -4,11 +4,8 @@ import { Button, Input, Label } from "@/components/ui/inputs"
 import { useState } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { PICKUP_POINTS, WHATSAPP_NUMBER } from '@/lib/data';
-;
-;
-;
-;
-import { ArrowLeft, Clock, MapPin, User, MessageSquare, Phone } from 'lucide-react';
+import { submitOrderToSheet, buildSheetPayload } from '@/lib/googleSheets';
+import { ArrowLeft, Clock, MapPin, User, MessageSquare, Phone, CreditCard, Banknote } from 'lucide-react';
 import { SheetHeader, SheetTitle } from "@/components/ui/overlays";
 
 interface CheckoutFormProps {
@@ -20,10 +17,11 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
   const [deliveryMethod, setDeliveryMethod] = useState<'takeaway' | 'pickup'>('takeaway');
   const [pickupTime, setPickupTime] = useState('');
   const [pickupPoint, setPickupPoint] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'transferencia' | 'efectivo'>('transferencia');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { getTotalPrice, generateWhatsAppMessage, clearCart } = useCartStore();
+  const { items, getTotalPrice, generateWhatsAppMessage, clearCart } = useCartStore();
   const totalPrice = getTotalPrice();
 
   const timeSlots = [
@@ -33,7 +31,7 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
     '19:00 - 20:00',
   ];
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name || !pickupTime) return;
     if (deliveryMethod === 'pickup' && !pickupPoint) return;
 
@@ -43,10 +41,24 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
       name,
       deliveryMethod,
       pickupTime,
+      paymentMethod,
       notes: notes || undefined,
     };
 
     useCartStore.getState().setOrderDetails(orderDetails);
+
+    // Send to Google Sheets (fire and forget — don't block WhatsApp)
+    const sheetPayload = buildSheetPayload(
+      name,
+      items.map((item) => ({
+        name: item.focaccia.name,
+        quantity: item.quantity,
+        price: item.focaccia.price,
+      })),
+      paymentMethod,
+      notes || ''
+    );
+    submitOrderToSheet(sheetPayload);
 
     const message = generateWhatsAppMessage();
     const encodedMessage = encodeURIComponent(message);
@@ -183,6 +195,40 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
           </div>
         </div>
 
+        {/* Payment Method */}
+        <div className="space-y-3">
+          <Label className="text-carbon flex items-center gap-2">
+            <CreditCard className="w-4 h-4 text-terracota" />
+            Forma de pago
+          </Label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('transferencia')}
+              className={`flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                paymentMethod === 'transferencia'
+                  ? 'border-oliva bg-oliva/10'
+                  : 'bg-white border-terracota/20 hover:border-terracota/40'
+              }`}
+            >
+              <CreditCard className={`w-5 h-5 mb-1 ${paymentMethod === 'transferencia' ? 'text-oliva' : 'text-carbon/50'}`} />
+              <span className="text-sm font-medium text-carbon">Transferencia</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('efectivo')}
+              className={`flex flex-col items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                paymentMethod === 'efectivo'
+                  ? 'border-oliva bg-oliva/10'
+                  : 'bg-white border-terracota/20 hover:border-terracota/40'
+              }`}
+            >
+              <Banknote className={`w-5 h-5 mb-1 ${paymentMethod === 'efectivo' ? 'text-oliva' : 'text-carbon/50'}`} />
+              <span className="text-sm font-medium text-carbon">Efectivo</span>
+            </button>
+          </div>
+        </div>
+
         {/* Notes */}
         <div className="space-y-2">
           <Label className="text-carbon flex items-center gap-2">
@@ -206,7 +252,7 @@ export function CheckoutForm({ onBack }: CheckoutFormProps) {
           className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-medium h-11 rounded-xl text-sm"
         >
           <Phone className="w-4 h-4 mr-1.5" />
-          Enviar pedido por WhatsApp
+          {isSubmitting ? 'Enviando...' : 'Enviar pedido por WhatsApp'}
         </Button>
         <p className="text-center text-xs text-carbon/50 mt-2">
           Te redirigiremos a WhatsApp para confirmar tu pedido
