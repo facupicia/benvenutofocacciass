@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
-import { focaccias as staticFocaccias, fetchProducts } from '@/lib/data';
 import { ProductCard } from './ProductCard';
 import { MenuListView } from './MenuListView';
 import { CartDrawer } from './CartDrawer';
@@ -10,6 +9,7 @@ import { ChevronUp, ChevronDown, ShoppingBag, LayoutGrid, List, Star } from 'luc
 import { useCartStore } from '@/store/cartStore';
 import { Header } from './Header';
 import type { Focaccia } from '@/types';
+import { fetchProducts } from '@/lib/data';
 
 interface VerticalFeedProps {
   onNavigate: (view: 'landing' | 'menu') => void;
@@ -18,13 +18,13 @@ interface VerticalFeedProps {
 export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'feed' | 'list'>('feed');
-  const [products, setProducts] = useState<Focaccia[]>(staticFocaccias);
+  const [products, setProducts] = useState<Focaccia[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef<number>(0);
   const { getTotalItems } = useCartStore();
   const totalItems = getTotalItems();
 
-  // Fetch products from Supabase
+  // Fetch products from Google Sheets
   useEffect(() => {
     fetchProducts().then(setProducts);
   }, []);
@@ -128,10 +128,11 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
             className="h-full w-full overflow-y-auto snap-y snap-mandatory scrollbar-hide"
             style={{ scrollBehavior: 'smooth' }}
           >
-            {products.map((focaccia) => (
+            {products.map((focaccia, index) => (
               <ProductCard
                 key={focaccia.id}
                 focaccia={focaccia}
+                isActive={Math.abs(index - currentIndex) <= 1}
               />
             ))}
           </div>

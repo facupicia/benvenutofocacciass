@@ -7,9 +7,10 @@ import { Plus, Minus, Check } from 'lucide-react';
 
 interface ProductCardProps {
   focaccia: Focaccia;
+  isActive?: boolean;
 }
 
-export function ProductCard({ focaccia }: ProductCardProps) {
+export function ProductCard({ focaccia, isActive = true }: ProductCardProps) {
   const [showAdded, setShowAdded] = useState(false);
   const { addToCart, items, updateQuantity } = useCartStore();
 
@@ -35,7 +36,7 @@ export function ProductCard({ focaccia }: ProductCardProps) {
   return (
     <div className="relative h-screen w-full flex-shrink-0 snap-start overflow-hidden">
       {/* Background Media */}
-      {focaccia.video ? (
+      {focaccia.video && isActive ? (
         <div className="absolute inset-0">
           <video
             src={focaccia.video}
@@ -43,6 +44,7 @@ export function ProductCard({ focaccia }: ProductCardProps) {
             loop
             muted
             playsInline
+            preload="none"
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Gradient Overlays */}

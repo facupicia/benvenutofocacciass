@@ -42,7 +42,7 @@ export function Header({ onNavigate, currentView }: HeaderProps) {
         >
           <div className="w-11 h-11 rounded-full bg-oliva flex items-center justify-center shadow-md transition-transform group-hover:scale-105">
             <img
-              src="/images/logo.png"
+              src="/images/logo.jpg"
               alt="Benvenuto Logo"
               className="w-full h-full rounded-full object-cover"
             />

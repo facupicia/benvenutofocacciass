@@ -1,0 +1,11 @@
+ID,Name,Price,Stock,Ingredients,Image,Video,Description
+1,Shampoo Hidratante,12.5,100,"Agua, Lauril sulfato de sodio, Glicerina, Aceite de coco",[URL],[URL],Shampoo para cabello seco y dañado.
+2,Crema Facial Anti-edad,25,45,"Retinol, Ácido hialurónico, Vitamina E",[URL],[URL],Crema nocturna para reducir líneas de expresión.
+3,Jabón Artesanal de Avena,5.75,120,"Avena natural, Aceite de oliva, Miel",[URL],[URL],Jabón suave para pieles sensibles.
+4,Protector Solar FPS 50,18.9,60,"Óxido de zinc, Dióxido de titanio, Aloe vera",[URL],[URL],Protección solar de amplio espectro resistente al agua.
+5,Acondicionador de Argán,14.2,85,"Aceite de argán, Queratina, Pantenol",[URL],[URL],Acondicionador profundo para brillo y suavidad.
+6,Serum de Vitamina C,30,30,"Vitamina C pura, Ácido ferúlico, Extracto de pomelo",[URL],[URL],Serum iluminador y antioxidante para el rostro.
+7,Exfoliante Corporal de Café,10.5,55,"Granos de café molido, Azúcar morena, Aceite de almendras",[URL],[URL],Exfoliante natural para una piel renovada.
+8,Bálsamo Labial de Cereza,3.25,200,"Cera de abejas, Manteca de cacao, Aroma a cereza",[URL],[URL],Hidratación intensiva para labios resecos.
+9,Tónico Facial de Rosas,12,40,"Agua de rosas destilada, Hamamelis",[URL],[URL],Tónico refrescante y equilibrante.
+10,Mascarilla de Arcilla Verde,15,25,"Arcilla verde, Extracto de té verde, Aceite de árbol de té",[URL],[URL],Mascarilla purificante para pieles grasas.

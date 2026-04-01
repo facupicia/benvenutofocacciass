@@ -1,55 +1,8 @@
-import { supabase } from './supabase';
 import type { Focaccia } from '@/types';
 
-// Static fallback data (used when Supabase is unavailable)
-export const focaccias: Focaccia[] = [
-  {
-    id: 1,
-    name: "Origen",
-    price: 2500,
-    stock: 10,
-    ingredients: ["Harina 000", "Agua", "Aceite de oliva", "Sal marina"],
-    image: "/images/focaccia-romero.jpg",
-    description: "Focaccia originaria, solo aceite de oliva. La esencia de Italia en su forma más pura.",
-    video: "https://v16-vod.capcutvod.com/61f0029afb7ecb8169b764a20e8dfb1d/69b6b407/video/tos/alisg/tos-alisg-ve-8fe9aq-sg/oIASWSzWQhMt4BcLmEnGo9khQ4FfIXyYAEwB9P/?a=3006&bti=cHJ3bzFmc3dmZEBvY15taF4rcm1gYA%3D%3D&ch=0&cr=0&dr=0&lr=all&cd=0%7C0%7C0%7C0&cv=1&br=2070&bt=1035&cs=0&ds=3&ft=GNvlXInz7ThkavhPXq8Zmo&mime_type=video_mp4&qs=0&rc=Zzc5PGhlOGU8ZGhkM2k7aUBpM2lnNDg6ZmxzbDMzOGVkNEBgXmIzM2BjXzExYzQ0NmMvYSNwZGUvcjRfbC1gLS1kYi1zcw%3D%3D&vvpl=1&l=202603101548248A1C72FD6EE8724EAF42&btag=e000b0000"
-  },
-  {
-    id: 2,
-    name: "Mediterránea",
-    price: 2800,
-    stock: 8,
-    ingredients: ["Harina 000", "Agua", "Cebolla", "Tomate", "Romero", "Oliva", "Aceite de oliva"],
-    image: "/images/focaccia-olivas.jpg",
-    description: "Focaccia con cebolla, tomate, romero y oliva. Sabores del Mediterráneo en cada bocado."
-  },
-  {
-    id: 3,
-    name: "Barese",
-    price: 3000,
-    stock: 6,
-    ingredients: ["Harina 000", "Agua", "Papa tipo española", "Romero", "Oliva", "Aceite de oliva"],
-    image: "/images/focaccia-cebolla.jpg",
-    description: "Focaccia con papa tipo española, romero y oliva. Receta tradicional de Bari."
-  },
-  {
-    id: 4,
-    name: "Apulia",
-    price: 2700,
-    stock: 9,
-    ingredients: ["Harina 000", "Agua", "Aceitunas verdes", "Aceitunas negras", "Romero", "Oliva"],
-    image: "/images/focaccia-tomate.jpg",
-    description: "Focaccia con aceitunas verdes y negras, romero y oliva. El sabor del sur de Italia."
-  },
-  {
-    id: 5,
-    name: "7 Lagos",
-    price: 3200,
-    stock: 5,
-    ingredients: ["Harina 000", "Agua", "Hongos de pino", "Champiñones", "Portobello", "Cebolla caramelizada"],
-    image: "/images/focaccia-paprika.jpg",
-    description: "Hongos de pino, champiñones, portobello y cebolla caramelizada. Una experiencia gourmet."
-  }
-];
+const PRODUCTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRme5cZlG_OMPewhoRYKKlVRE8Kcg2p0kIikP6I2ividJmHNpTZtm2gH4aRqK3CfSX8X1q8z2siIn-v/pub?gid=0&single=true&output=csv';
+
+
 
 export const PICKUP_POINTS = [
   { id: 'casilda-center', name: 'Casilda - Centro', address: 'San Martín 1234, Casilda' },
@@ -58,52 +11,74 @@ export const PICKUP_POINTS = [
 export const WHATSAPP_NUMBER = '5493464566794';
 
 /**
- * Fetch products from Supabase, fallback to static data
+ * Parse a CSV line respecting quoted fields (handles commas inside quotes)
  */
-export async function fetchProducts(): Promise<Focaccia[]> {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('id', { ascending: true });
+function parseCSVLine(line: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let inQuotes = false;
 
-    if (error) throw error;
-    return data ?? focaccias;
-  } catch {
-    console.warn('Failed to fetch products from Supabase, using static data');
-    return focaccias;
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
   }
+  result.push(current.trim());
+  return result;
 }
 
 /**
- * Fetch latest reviews from Supabase
+ * Fetch products from the published Google Sheets CSV (cached in memory)
  */
-export async function fetchReviews(limit = 10) {
-  try {
-    const { data, error } = await supabase
-      .from('reviews')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(limit);
+let cachedProducts: Focaccia[] | null = null;
 
-    if (error) throw error;
-    return data ?? [];
-  } catch {
-    console.warn('Failed to fetch reviews from Supabase');
+export async function fetchProducts(): Promise<Focaccia[]> {
+  if (cachedProducts) return cachedProducts;
+
+  try {
+    const response = await fetch(PRODUCTS_CSV_URL);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const csv = await response.text();
+    const lines = csv.split(/\r?\n/).filter((l) => l.trim().length > 0);
+
+    if (lines.length < 2) throw new Error('CSV has no data rows');
+
+    // Skip header row (line 0), parse data rows
+    const products: Focaccia[] = lines.slice(1).map((line) => {
+      const cols = parseCSVLine(line);
+      // Columns: ID, Name, Price, Stock, Ingredients, Image, Video, Description
+      const rawImage = cols[5] || '';
+      const rawVideo = cols[6] || '';
+      // Filter out placeholder values like [URL] that aren't actual URLs
+      const isValidUrl = (val: string) => val && val !== '[URL]' && !val.startsWith('[');
+      return {
+        id: parseInt(cols[0], 10),
+        name: cols[1] || '',
+        price: parseFloat(cols[2]) || 0,
+        stock: parseInt(cols[3], 10) || 0,
+        ingredients: cols[4] ? cols[4].split(',').map((s) => s.trim()) : [],
+        image: isValidUrl(rawImage) ? rawImage : '/images/placeholder.jpg',
+        video: isValidUrl(rawVideo) ? rawVideo : undefined,
+        description: cols[7] || '',
+      };
+    });
+
+    cachedProducts = products.filter((p) => p.id && p.name);
+    return cachedProducts;
+  } catch (err) {
+    console.warn('Failed to fetch products from Google Sheets:', err);
     return [];
   }
-}
-
-/**
- * Insert a review into Supabase
- */
-export async function insertReview(review: { rating: number; description: string }) {
-  const { data, error } = await supabase
-    .from('reviews')
-    .insert([review])
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
 }
