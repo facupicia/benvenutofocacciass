@@ -23,7 +23,7 @@ export function Header({ onNavigate }: HeaderProps) {
           onClick={() => handleNavClick('landing')}
         >
           <div className="w-10 h-10 rounded-full bg-oliva flex items-center justify-center">
-            <span className="text-lg text-crema font-bold">B</span>
+            <img src="/images/logo.png" alt="Logo" className="text-lg text-crema font-bold w-10 h-10 rounded-full object-cover" />
           </div>
           <div>
             <h1 className="text-xl text-white font-semibold drop-shadow-lg">
