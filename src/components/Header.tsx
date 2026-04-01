@@ -1,81 +1,94 @@
 "use client";
 
+import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/overlays";
 import { Menu } from 'lucide-react';
 
 interface HeaderProps {
   onNavigate: (view: 'landing' | 'menu') => void;
-  showCart?: boolean;
+  currentView?: 'landing' | 'menu';
 }
 
-export function Header({ onNavigate }: HeaderProps) {
-  const handleNavClick = (view: 'landing' | 'menu') => {
+// Definimos la configuración de navegación fuera del componente para no recrearla en cada render
+const NAV_ITEMS = [
+  { label: 'Menú', view: 'menu' as const },
+  { label: 'Nosotros', view: 'landing' as const, sectionId: 'nosotros' },
+  { label: 'Contacto', view: 'landing' as const, sectionId: 'contacto' },
+];
+
+export function Header({ onNavigate, currentView }: HeaderProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleNavigation = (view: 'landing' | 'menu', sectionId?: string) => {
+    setIsOpen(false); // Cerramos el Sheet automáticamente al navegar
     onNavigate(view);
-    // Optionally close the sheet if needed, though typically navigation might handle this
+
+    if (sectionId) {
+      // Pequeño delay para asegurar que la vista 'landing' se haya montado antes de scrollear
+      setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-50 p-4 pt-6">
-      <div className="flex items-center justify-between">
+    <div className="absolute top-0 left-0 right-0 z-50 p-4 pt-6 pointer-events-none">
+      <div className="flex items-center justify-between pointer-events-auto">
+
         {/* Logo Section */}
-        <div 
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => handleNavClick('landing')}
+        <div
+          className="flex items-center gap-3 cursor-pointer group"
+          onClick={() => handleNavigation('landing')}
         >
-          <div className="w-10 h-10 rounded-full bg-oliva flex items-center justify-center">
-            <img src="/images/logo.png" alt="Logo" className="text-lg text-crema font-bold w-10 h-10 rounded-full object-cover" />
+          <div className="w-11 h-11 rounded-full bg-oliva flex items-center justify-center shadow-md transition-transform group-hover:scale-105">
+            <img
+              src="/images/logo.png"
+              alt="Benvenuto Logo"
+              className="w-full h-full rounded-full object-cover"
+            />
           </div>
-          <div>
-            <h1 className="text-xl text-white font-semibold drop-shadow-lg">
+          <div className="flex flex-col">
+            <h1 className="text-xl text-white font-semibold drop-shadow-md leading-none tracking-wide">
               Benvenuto
             </h1>
-            <p className="text-white/70 text-xs">Focaccias artesanales</p>
+            <span className="text-white/80 text-xs mt-1 font-medium drop-shadow-sm">
+              Focaccias artesanales
+            </span>
           </div>
         </div>
-        
-        {/* Navigation & Actions */}
-        <div className="flex items-center gap-4">
-          <Sheet>
-            <SheetTrigger asChild>
-              <button className="w-10 h-10 rounded-full bg-terracota backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors">
-                <Menu className="w-5 h-5 text-white" />
-              </button>
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-crema border-l border-oliva/20 w-[300px] sm:w-[400px]">
-              <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
-              <div className="flex flex-col gap-6 mt-12">
-                <button 
-                  onClick={() => handleNavClick('menu')}
-                  className="text-2xl text-crust text-left hover:text-oliva transition-colors font-semibold"
+
+        {/* Navigation Actions */}
+        {currentView !== 'menu' && (
+          <div className="flex items-center gap-4">
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <button
+                  className="w-11 h-11 rounded-full bg-terracota flex items-center justify-center hover:brightness-110 active:scale-95 transition-all shadow-lg"
+                  aria-label="Abrir menú"
                 >
-                  Menú
+                  <Menu className="w-5 h-5 text-crema" />
                 </button>
-                <button 
-                  onClick={() => {
-                    handleNavClick('landing');
-                    setTimeout(() => {
-                      document.getElementById('nosotros')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="text-2xl text-crust text-left hover:text-oliva transition-colors font-semibold   "
-                >
-                  Nosotros
-                </button>
-                <button 
-                  onClick={() => {
-                    handleNavClick('landing');
-                    setTimeout(() => {
-                      document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="text-2xl  text-crust text-left hover:text-oliva transition-colors font-semibold"
-                >
-                  Contacto
-                </button>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+              </SheetTrigger>
+
+              <SheetContent side="right" className="bg-crema border-l border-oliva/20 w-[300px] sm:w-[400px]">
+                <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
+
+                <nav className="flex flex-col gap-6 mt-16 px-2">
+                  {NAV_ITEMS.map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => handleNavigation(item.view, item.sectionId)}
+                      className="text-2xl text-crust text-left hover:text-oliva hover:translate-x-2 transition-all font-semibold"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+        )}
+
       </div>
     </div>
   );

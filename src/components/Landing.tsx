@@ -33,7 +33,7 @@ export function Landing({ onNavigate }: LandingProps) {
           </p>
           <button
             onClick={() => onNavigate('menu')}
-            className="group relative px-8 py-4 bg-oliva hover:bg-oliva/90 text-crema font-bold uppercase tracking-wider rounded-none overflow-hidden transition-all shadow-[8px_8px_0_0_#FBEEDE] hover:shadow-[12px_12px_0_0_#FBEEDE] active:shadow-[4px_4px_0_0_#FBEEDE] active:translate-x-[4px] active:translate-y-[4px]"
+            className="group relative px-8 py-4 bg-oliva text-crema font-bold uppercase tracking-wider rounded-none overflow-hidden transition-all]"
           >
             <span className="relative z-10 flex items-center gap-2">
               Ver Menú

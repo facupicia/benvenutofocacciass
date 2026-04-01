@@ -94,21 +94,27 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
   return (
     <div className="relative h-screen w-full bg-crust overflow-hidden">
       {/* Header */}
-      <Header onNavigate={onNavigate} />
-      <div className="absolute top-0 right-0 z-50 p-4 pt-6 flex items-center gap-2">
+      <Header onNavigate={onNavigate} currentView="menu" />
 
+      {/* Action Buttons — always visible */}
+      <div className="absolute right-4 top-6 z-50 flex items-center gap-2">
         {/* View Toggle */}
         <button
           onClick={() => setViewMode(viewMode === 'feed' ? 'list' : 'feed')}
-          className="w-10 h-10 rounded-full bg-oliva backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all hover:bg-white/30"
+          className="w-10 h-10 rounded-full bg-terracota flex items-center justify-center hover:brightness-110 shadow-lg"
         >
           {viewMode === 'feed' ? (
-            <List className="w-5 h-5 text-white" />
+            <List className="w-5 h-5 text-crema" />
           ) : (
-            <LayoutGrid className="w-5 h-5 text-white" />
+            <LayoutGrid className="w-5 h-5 text-crema" />
           )}
         </button>
-        <CartDrawer />
+
+        <ReviewModal>
+          <button className="w-10 h-10 rounded-full bg-terracota flex items-center justify-center hover:brightness-110 shadow-lg">
+            <Star className="w-5 h-5 text-crema fill-crema" />
+          </button>
+        </ReviewModal>
       </div>
 
       {viewMode === 'feed' ? (
@@ -130,25 +136,15 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
             ))}
           </div>
 
-          {/* Review Button */}
-          <div className="absolute right-4 top-24 z-50 flex flex-col gap-2">
-            <ReviewModal>
-              <button className="w-10 h-10 rounded-full bg-oliva backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all hover:bg-white">
-                <Star className="w-5 h-5 text-white fill-white" />
-              </button>
-            </ReviewModal>
-          </div>
-
           {/* Navigation Indicators */}
           <div className="absolute left-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2">
-
             {products.map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all ${index === currentIndex
-                    ? 'bg-oliva w-2 h-6'
-                    : 'bg-white/50 hover:bg-white'
+                className={`w-2 h-2 rounded-full transition-all shadow-sm ${index === currentIndex
+                  ? 'bg-terracota w-2 h-6'
+                  : 'bg-crema hover:bg-crema'
                   }`}
               />
             ))}
@@ -159,16 +155,16 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
             <button
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-white/30 transition-colors"
+              className="w-10 h-10 rounded-full bg-crust flex items-center justify-center disabled:opacity-30 hover:brightness-125 transition-all shadow-lg"
             >
-              <ChevronUp className="w-5 h-5 text-white" />
+              <ChevronUp className="w-5 h-5 text-crema" />
             </button>
             <button
               onClick={handleNext}
               disabled={currentIndex === products.length - 1}
-              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-white/30 transition-colors"
+              className="w-10 h-10 rounded-full bg-crust flex items-center justify-center disabled:opacity-30 hover:brightness-125 transition-all shadow-lg"
             >
-              <ChevronDown className="w-5 h-5 text-white" />
+              <ChevronDown className="w-5 h-5 text-crema" />
             </button>
           </div>
         </>
@@ -181,7 +177,7 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
         <div className="absolute bottom-6 left-4 right-4 z-50">
           <CartDrawer
             trigger={
-              <div className="bg-oliva backdrop-blur-sm rounded-2xl p-4 flex items-center justify-between shadow-lg cursor-pointer active:scale-[0.98] transition-transform">
+              <div className="bg-terracota rounded-2xl p-4 flex items-center justify-between shadow-lg cursor-pointer active:scale-[0.98] transition-transform">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-crema/20 flex items-center justify-center">
                     <ShoppingBag className="w-5 h-5 text-crema" />
@@ -204,8 +200,8 @@ export function VerticalFeed({ onNavigate }: VerticalFeedProps) {
 
       {/* Product Counter */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
-        <div className="px-4 py-2 bg-black/40 backdrop-blur-sm rounded-full">
-          <span className="text-white/90 text-sm">
+        <div className="px-4 py-2 bg-terracota rounded-full shadow-lg">
+          <span className="text-crema text-sm font-medium">
             {currentIndex + 1} / {products.length}
           </span>
         </div>
