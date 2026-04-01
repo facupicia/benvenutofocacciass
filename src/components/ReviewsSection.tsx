@@ -65,11 +65,11 @@ export function ReviewsSection() {
   const visibleReviews = getVisibleReviews();
 
   return (
-    <section className="py-24 px-4 bg-crust/5 overflow-hidden" id="reviews">
-      <div className="max-w-5xl mx-auto">
+    <section className="py-24 px-4 bg-crust/5 overflow-hidden bg-texture" id="reviews">
+      <div className="max-w-5xl mx-auto border-t border-oliva pt-10 relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h3 className="text-4xl text-oliva font-bold mb-4">Lo que dicen nuestros clientes</h3>
+          <h3 className="text-4xl text-crust font-bold mb-4">Lo que dicen nuestros clientes</h3>
           <div className="flex items-center justify-center gap-2 mb-2">
             <div className="flex gap-0.5">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -77,14 +77,14 @@ export function ReviewsSection() {
                   key={star}
                   className={`w-5 h-5 ${
                     star <= Math.round(avgRating)
-                      ? 'fill-oliva text-oliva'
-                      : 'text-oliva/30'
+                      ? 'fill-terracota text-terracota'
+                      : 'text-terracota/30'
                   }`}
                 />
               ))}
             </div>
-            <span className="text-crust/70 text-lg font-medium">{avgRating}</span>
-            <span className="text-crust/50 text-sm">({reviews.length} reseña{reviews.length !== 1 ? 's' : ''})</span>
+            <span className="text-crust text-lg font-medium">{avgRating}</span>
+            <span className="text-crust text-sm">({reviews.length} reseña{reviews.length !== 1 ? 's' : ''})</span>
           </div>
         </div>
 
@@ -103,9 +103,9 @@ export function ReviewsSection() {
               <div className="flex items-center justify-center gap-4 mt-6">
                 <button
                   onClick={goPrev}
-                  className="w-10 h-10 rounded-full bg-oliva/10 flex items-center justify-center hover:bg-oliva/20 transition-colors"
+                  className="w-10 h-10 rounded-full  flex items-center justify-center  transition-colors"
                 >
-                  <ChevronLeft className="w-5 h-5 text-oliva" />
+                  <ChevronLeft className="w-5 h-5 text-terracota" />
                 </button>
                 <div className="flex gap-1.5">
                   {displayReviews.slice(0, Math.min(displayReviews.length, 8)).map((_, i) => (
@@ -113,16 +113,16 @@ export function ReviewsSection() {
                       key={i}
                       onClick={() => goTo(i)}
                       className={`w-2 h-2 rounded-full transition-all ${
-                        i === activeIndex ? 'bg-oliva w-6' : 'bg-oliva/30'
+                        i === activeIndex ? 'bg-terracota w-6' : 'bg-terracota'
                       }`}
                     />
                   ))}
                 </div>
                 <button
                   onClick={goNext}
-                  className="w-10 h-10 rounded-full bg-oliva/10 flex items-center justify-center hover:bg-oliva/20 transition-colors"
+                  className="w-10 h-10 rounded-full  flex items-center justify-center  transition-colors"
                 >
-                  <ChevronRight className="w-5 h-5 text-oliva" />
+                  <ChevronRight className="w-5 h-5 text-terracota" />
                 </button>
               </div>
             )}
@@ -166,8 +166,8 @@ function ReviewCard({ review }: { review: { id: string; rating: number; descript
   });
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-oliva/10 relative">
-      <Quote className="w-8 h-8 text-oliva/15 absolute top-4 right-4" />
+    <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-oliva relative">
+      <Quote className="w-8 h-8 text-oliva absolute top-4 right-4" />
 
       {/* Stars */}
       <div className="flex gap-0.5 mb-3">
@@ -175,7 +175,7 @@ function ReviewCard({ review }: { review: { id: string; rating: number; descript
           <Star
             key={star}
             className={`w-4 h-4 ${
-              star <= review.rating ? 'fill-oliva text-oliva' : 'text-oliva/20'
+              star <= review.rating ? 'fill-terracota text-terracota' : 'text-terracota/20'
             }`}
           />
         ))}

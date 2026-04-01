@@ -6,7 +6,7 @@
   :root {
     /* === Brand Palette (edit these to change the whole app) === */
     --color-crema: #FDEFDA;
-    --color-oliva: #6C6819;
+    --color-oliva: #888435;
     --color-crust: #5D2A00;
     --color-terracota: #C75B39;
     --color-carbon: #2C2C2C;
@@ -107,4 +107,21 @@ body {
 ::selection {
   background-color: var(--color-oliva);
   color: var(--color-crema);
+}
+
+/* Subtle grain / flour texture overlay */
+.bg-texture {
+  position: relative;
+}
+.bg-texture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.45;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: multiply;
+  z-index: 0;
 }

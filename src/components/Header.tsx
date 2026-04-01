@@ -63,7 +63,7 @@ export function Header({ onNavigate, currentView }: HeaderProps) {
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <button
-                  className="w-11 h-11 rounded-full bg-terracota flex items-center justify-center hover:brightness-110 active:scale-95 transition-all shadow-lg"
+                  className="w-11 h-11 rounded-full bg-oliva flex items-center justify-center hover:brightness-110 active:scale-95 transition-all shadow-lg"
                   aria-label="Abrir menú"
                 >
                   <Menu className="w-5 h-5 text-crema" />
